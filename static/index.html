@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>查询QQ历史信息</title>
+<link rel="Shortcut Icon" href="./bitbug_favicon.ico" type="image/x-icon" />
+
+</head>
+<body>
+<p>输入qq和群号---查询当前qq号在某群所有发送信息</p>
+<p>输入qq--------查询当前qq号在记录的群所有发送信息</p>
+<span>当前记录群号：</span><span id="group_list"></span>
+<br>
+<input id="qq" type="text" placeholder="QQ">
+<input id="group" type="text" placeholder="群号">
+
+<button id="btn">查找</button>
+<p id="info"></p>
+<pre id="out_pre"></pre>
+
+</body>
+<script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script type="text/javascript">
+
+    $(function () {
+        $.ajax({
+
+            url: "group_id",
+
+            // dataType:'json',
+            headers:{'Content-Type':'application/json'},
+            method: "get",
+            processData: false,
+            success: function (res) {
+                console.log(res)
+                $('#group_list')[0].innerText =res.group_id
+
+            }
+        })
+    })
+    $("#btn").click(function () {
+        let group_id = $("#group").val();
+        let user_id = $("#qq").val();
+
+        if (group_id == ""){
+            group_id ="not"
+        }
+
+        if (user_id != ""){
+            console.log(group_id,user_id)
+            $.ajax({
+
+                url: "find",
+                data: JSON.stringify({
+                    "group_id": group_id,
+                    "user_id":user_id
+                }),
+                // dataType:'json',
+                headers:{'Content-Type':'application/json'},
+                method: "post",
+                processData: false,
+                success: function (res) {
+                    console.log(res)
+                    var text = JSON.stringify(res); //获取json格式内容
+
+                    var r = JSON.stringify(JSON.parse(text), null, 2);//将字符串转换成json对象
+
+                    document.getElementById('out_pre').innerText= r ;
+                    document.getElementById('info').innerText= "查询成功\nuser_id:"+user_id+"\ngroup_id:"+group_id
+                }
+            })
+        }
+
+    })
+
+
+</script>
+
+
+</html>
