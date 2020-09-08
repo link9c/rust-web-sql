@@ -7,5 +7,5 @@ use anyhow::Result;
 
 fn main() {
 
-    let database_url = "mssql://link:12345@118.25.135.209/coolq";
+    let database_url = "mssql://sa:MP-it226@10.9.1.234/OA_tmp";
 }
